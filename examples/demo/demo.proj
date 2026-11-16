@@ -1,0 +1,38 @@
+# A hand-assembled image in the style of BLISS-16 output (demo.bin, loaded at 0):
+#
+#   001000  MAIN:   MOV  #3,R0          ; register parameter
+#                   JSR  PC,DOUBLE
+#                   MOV  R0,-(SP)       ; stack argument
+#                   JSR  PC,PICK
+#                   TST  (SP)+          ; caller pops
+#                   MOV  R0,@#RESULT
+#                   RTS  PC
+#   001100  DOUBLE: ASL  R0
+#                   RTS  PC
+#   001200  PICK:   MOV  2(SP),R0
+#                   ASL  R0
+#                   ADD  1300(R0),PC    ; CASE dispatch, offsets from 001212
+#                   MOV  #10,R0
+#                   RTS  PC
+#                   MOV  #20,R0
+#                   RTS  PC
+#   001300          .WORD 0, 6          ; case table
+#   001400  FIRST:  JSR  R1,$SAV2       ; saves R1, R2
+#                   MOV  10(SP),R2
+#                   MOV  R2,R0
+#                   RTS  PC
+#   001500  SETPRI: MTPS #340
+#                   RTS  PC
+#   002000  RESULT: data
+#   003000  $SAV2:  register-save helper (a stub here)
+
+module DEMO
+image demo.bin 0
+own 1000-3000
+include names.proj
+entry 1000 MAIN
+entry 1400
+entry 1500
+case 1206 1300 2. 1212
+nocode 1300-1304
+save 3000 2

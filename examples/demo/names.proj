@@ -1,0 +1,7 @@
+label 1100 DOUBLE
+label 1200 PICK
+label 1400 FIRST
+label 3000 $SAV2
+sym 2000 RESULT ; last value picked
+comment 1200 selects a constant by index
+label 1500 SETPRI
